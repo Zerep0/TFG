@@ -1,0 +1,113 @@
+/**
+ * @id java/orion/entity-added
+ * @kind problem
+ * @name Added Entity 
+ * @description Detects when a new entity is added to the project and a method can return instances of this entity.
+ * @problem.severity recommendation
+ */
+
+import java
+import utils
+import semmle.code.java.dataflow.TaintTracking
+
+// Clase para la anotación @Inheritance
+class InheritanceStrategyJOINED extends Annotation {
+  InheritanceStrategyJOINED() {
+    this.getType().hasQualifiedName("jakarta.persistence", "Inheritance") and
+    this.getValue("strategy").toString() = "InheritanceType.JOINED"
+  }
+}
+
+predicate childParentInheritanceWithStrategyJOINED(Class child, Class parent) {
+  child.hasName("VideoPost") and parent = child.getASupertype().(Class)
+  and parent.getAnAnnotation() instanceof InheritanceStrategyJOINED
+}
+
+
+predicate usesParentEntity(Expr queryValue, Class parent) {
+  queryValue.toString().regexpMatch(
+    "(?i).*\\bFROM\\s+" + parent.getName() + "\\b.*"
+  )
+  or
+  queryValue.toString().regexpMatch(
+    "(?i).*\\bJOIN\\s+(?:FETCH\\s+)?" + parent.getName() + "\\b.*"
+  )
+}
+
+// Predicado para identificar si el método devuelve una colección de la clase parent
+predicate isCollectionOfParent(Method m, Class parent) {
+  exists(ParameterizedType pt |
+    m.getReturnType() = pt and
+    m.getReturnType().(ParameterizedType).getPackage().getName() = "java.util" and
+    pt.getTypeArgument(0).hasQualifiedName(parent.getPackage().getName(), parent.getName()) and
+    pt.getTypeArgument(0).getName() = parent.getName()
+  )
+}
+
+// Predicado para verificar si el método devuelve un solo objeto de tipo parent
+predicate isParent(Method m, Class parent) {
+  m.getReturnType().hasName(parent.getName()) and 
+  m.getReturnType().(Class).getPackage().getName() = parent.getPackage().getName()
+}
+
+predicate typeOfReturn(Method m, Class parent) {
+  isCollectionOfParent(m, parent) or isParent(m, parent)
+}
+
+module JPQLFlowConfiguration implements DataFlow::ConfigSig {
+  
+   predicate isSource(DataFlow::Node source) {
+    exists(StringLiteral str |
+      source.asExpr() = str 
+    )
+  }
+
+  predicate isSink(DataFlow::Node sink) {
+    exists(MethodCall mc |
+      mc.getMethod().getDeclaringType().hasQualifiedName("jakarta.persistence", "EntityManager")
+      and mc.getMethod().getName() = "createQuery" and
+      mc.getMethod().getNumberOfParameters() = 1 and
+      sink.asExpr() = mc.getArgument(0)
+    )
+  }
+}
+
+module JPQLFlow = TaintTracking::Global<JPQLFlowConfiguration>;
+
+
+from Class child, Class parent, Annotation nq, Annotation q, Method m, MethodCall mc, DataFlow::Node source, DataFlow::Node sink
+where 
+
+  // Check if the child class is VideoPost and the parent class has the annotation @Inheritance(strategy = InheritanceType.JOINED)
+  childParentInheritanceWithStrategyJOINED(child, parent)
+
+  // Condition to find the query
+  and (
+      // Search namedQuery actives
+      (isQuery(q) and isNamedQuery(nq) and isEqual(nq.getValue("name"), q.getValue("name"))
+       and usesParentEntity(nq.getValue("query"), parent) and typeOfReturn(m, parent)
+       and m = q.getTarget() and mc.getMethod() = m) 
+     
+      or 
+      // Search queries
+      (isQuery(q) and usesParentEntity(q.getValue("value"), parent) and typeOfReturn(m, parent)
+      and m = q.getTarget() and mc.getMethod() = m)
+
+      or
+      // Search createQuery
+      (mc.getMethod() = m
+      and m.getDeclaringType().hasQualifiedName("jakarta.persistence", "EntityManager")
+      and m.getName() = "createQuery"
+      and (
+        // CreateQuery: Two parameters, typed
+        (m.getNumberOfParameters() = 2 and mc.getArgument(1).toString().matches(parent.getName() + ".class"))
+        or
+        // CreateQuery: One parameter
+        (JPQLFlow::flow(source, sink) and usesParentEntity(source.asExpr(), parent))
+      ))
+  )
+  
+select mc,  "A new entity " + child.getName() + " has been added. This method can now return instances of this entity."
+
+
+// deberia de comprobar si es una query y hace casting del padre, o si no cualquier metodo que devuelva una coleccion de la clase padre

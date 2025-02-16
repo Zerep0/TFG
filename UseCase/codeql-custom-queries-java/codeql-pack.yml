@@ -1,0 +1,7 @@
+# This is an automatically generated file.
+name: my-queries
+version: 0.0.0
+dependencies:
+  codeql/java-all: "*"
+extractor: java
+

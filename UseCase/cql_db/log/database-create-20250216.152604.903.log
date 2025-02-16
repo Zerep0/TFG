@@ -1,0 +1,422 @@
+[2025-02-16 15:26:04] This is codeql database create cql_db --language=java --source-root=. --overwrite
+[2025-02-16 15:26:04] Log file was started late.
+[2025-02-16 15:26:04] [PROGRESS] database create> Initializing database at /home/zerep/Desktop/TFG/UseCase/cql_db.
+[2025-02-16 15:26:04] Running plumbing command: codeql database init --overwrite --language=java --extractor-options-verbosity=1 --qlconfig-file=/home/zerep/Desktop/TFG/UseCase/qlconfig.yml --source-root=/home/zerep/Desktop/TFG/UseCase --allow-missing-source-root=false --allow-already-existing -- /home/zerep/Desktop/TFG/UseCase/cql_db
+[2025-02-16 15:26:04] Calling plumbing command: codeql resolve languages --extractor-options-verbosity=1 --format=betterjson
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Scanning for [codeql-extractor.yml] from /opt/codeql/.codeqlmanifest.json
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/properties/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/csv/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/java/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/csharp/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/ruby/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/html/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/javascript/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/go/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/yaml/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/swift/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/cpp/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/xml/codeql-extractor.yml.
+[2025-02-16 15:26:05] [DETAILS] resolve languages> Parsing /opt/codeql/python/codeql-extractor.yml.
+[2025-02-16 15:26:05] Plumbing command codeql resolve languages completed:
+                      {
+                        "aliases" : {
+                          "c" : "cpp",
+                          "c++" : "cpp",
+                          "c-c++" : "cpp",
+                          "c-cpp" : "cpp",
+                          "c#" : "csharp",
+                          "java-kotlin" : "java",
+                          "kotlin" : "java",
+                          "javascript-typescript" : "javascript",
+                          "typescript" : "javascript"
+                        },
+                        "extractors" : {
+                          "properties" : [
+                            {
+                              "extractor_root" : "/opt/codeql/properties"
+                            }
+                          ],
+                          "csv" : [
+                            {
+                              "extractor_root" : "/opt/codeql/csv"
+                            }
+                          ],
+                          "java" : [
+                            {
+                              "extractor_root" : "/opt/codeql/java",
+                              "extractor_options" : {
+                                "exclude" : {
+                                  "title" : "A glob excluding files from analysis.",
+                                  "description" : "A glob indicating what files to exclude from the analysis.\n",
+                                  "type" : "string"
+                                },
+                                "add_prefer_source" : {
+                                  "title" : "Whether to always prefer source files over class files.",
+                                  "description" : "A value indicating whether source files should be preferred over class files. If set to 'true', the extraction adds '-Xprefer:source' to the javac command line. If set to 'false', the extraction uses the default javac behavior ('-Xprefer:newer'). The default is 'true'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless" : {
+                                  "title" : "Whether to use buildless (standalone) extraction (experimental).",
+                                  "description" : "A value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "csharp" : [
+                            {
+                              "extractor_root" : "/opt/codeql/csharp",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'brotli' (the default, to write brotli-compressed TRAP), 'gzip', and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|brotli)$"
+                                    }
+                                  }
+                                },
+                                "buildless" : {
+                                  "title" : "DEPRECATED - Whether to use buildless (standalone) extraction.",
+                                  "description" : "DEPRECATED: Use `--build-mode none` instead.\nA value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "binlog" : {
+                                  "title" : "Binlog",
+                                  "description" : "[EXPERIMENTAL] The value is a path to the MsBuild binary log file that should be extracted. This option only works when `--build-mode none` is also specified.\n",
+                                  "type" : "array"
+                                }
+                              }
+                            }
+                          ],
+                          "ruby" : [
+                            {
+                              "extractor_root" : "/opt/codeql/ruby",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (the default, to write gzip-compressed TRAP) and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip)$"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ],
+                          "html" : [
+                            {
+                              "extractor_root" : "/opt/codeql/html"
+                            }
+                          ],
+                          "javascript" : [
+                            {
+                              "extractor_root" : "/opt/codeql/javascript",
+                              "extractor_options" : {
+                                "skip_types" : {
+                                  "title" : "Skip type extraction for TypeScript",
+                                  "description" : "Whether to skip the extraction of types in a TypeScript application",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "go" : [
+                            {
+                              "extractor_root" : "/opt/codeql/go",
+                              "extractor_options" : {
+                                "extract_tests" : {
+                                  "title" : "Whether to include Go test files in the CodeQL database.",
+                                  "description" : "A value indicating whether Go test files should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "extract_vendor_dirs" : {
+                                  "title" : "Whether to include Go vendor directories in the CodeQL database.",
+                                  "description" : "A value indicating whether Go vendor directories should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "yaml" : [
+                            {
+                              "extractor_root" : "/opt/codeql/yaml"
+                            }
+                          ],
+                          "swift" : [
+                            {
+                              "extractor_root" : "/opt/codeql/swift"
+                            }
+                          ],
+                          "cpp" : [
+                            {
+                              "extractor_root" : "/opt/codeql/cpp",
+                              "extractor_options" : {
+                                "scale_timeouts" : {
+                                  "title" : "Value to scale compiler introspection timeouts with",
+                                  "description" : "The extractor attempts to determine what compiler the source code being extracted is compiled with. To this end the extractor makes additional calls to the compiler, some of which are expected to return within a certain fixed time (either 10s or 15s). On some systems that are under high load this time might be too short, and can be scaled up using this option.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-9]+"
+                                },
+                                "log_verbosity" : {
+                                  "title" : "Verbosity of the extractor logging",
+                                  "description" : "Set the verbosity of the extractor logging to 'quiet' (0), 'normal' (1), 'chatty' (2), or 'noisy' (3). The default is 'normal'.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-3]"
+                                }
+                              }
+                            }
+                          ],
+                          "xml" : [
+                            {
+                              "extractor_root" : "/opt/codeql/xml"
+                            }
+                          ],
+                          "python" : [
+                            {
+                              "extractor_root" : "/opt/codeql/python",
+                              "extractor_options" : {
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Python extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the CodeQL Python extractor.\nThe supported levels are (in order of increasing verbosity):\n\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "python_executable_name" : {
+                                  "title" : "Controls the name of the Python executable used by the Python extractor.",
+                                  "description" : "The Python extractor uses platform-dependent heuristics to determine the name of the Python executable to use. Specifying a value for this option overrides the name of the Python executable used by the extractor. Accepted values are py, python and python3. Use this setting with caution, the Python extractor requires Python 3 to run.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(py|python|python3)$"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+[2025-02-16 15:26:05] [PROGRESS] database init> Calculating baseline information in /home/zerep/Desktop/TFG/UseCase
+[2025-02-16 15:26:05] [SPAMMY] database init> Ignoring the following directories when processing baseline information: .git, .hg, .svn.
+[2025-02-16 15:26:05] [DETAILS] database init> Running command in /home/zerep/Desktop/TFG/UseCase: /opt/codeql/tools/linux64/scc --by-file --exclude-dir .git,.hg,.svn --format json --no-large --no-min .
+[2025-02-16 15:26:05] [SPAMMY] database init> Found 16 baseline files for java.
+[2025-02-16 15:26:05] [PROGRESS] database init> Calculated baseline information for languages: java (24ms).
+[2025-02-16 15:26:05] [PROGRESS] database init> Resolving extractor java.
+[2025-02-16 15:26:05] [DETAILS] database init> Found candidate extractor root for java: /opt/codeql/java.
+[2025-02-16 15:26:05] [PROGRESS] database init> Successfully loaded extractor Java/Kotlin (java) from /opt/codeql/java.
+[2025-02-16 15:26:05] [PROGRESS] database init> Created skeleton CodeQL database at /home/zerep/Desktop/TFG/UseCase/cql_db. This in-progress database is ready to be populated by an extractor.
+[2025-02-16 15:26:05] Plumbing command codeql database init completed.
+[2025-02-16 15:26:05] Using autobuild script /opt/codeql/java/tools/autobuild.sh.
+[2025-02-16 15:26:05] [DETAILS] database create> Detected autobuild command for Java/Kotlin: /opt/codeql/java/tools/autobuild.sh.
+[2025-02-16 15:26:05] [PROGRESS] database create> Running build command: [/opt/codeql/java/tools/autobuild.sh]
+[2025-02-16 15:26:05] Running plumbing command: codeql database trace-command --working-dir=/home/zerep/Desktop/TFG/UseCase --index-traceless-dbs --no-db-cluster -- /home/zerep/Desktop/TFG/UseCase/cql_db /opt/codeql/java/tools/autobuild.sh
+[2025-02-16 15:26:05] [PROGRESS] database trace-command> Running command in /home/zerep/Desktop/TFG/UseCase: [/opt/codeql/java/tools/autobuild.sh]
+[2025-02-16 15:26:05] [build-stdout] Aqui estan /opt/codeql/tools/linux64/java
+[2025-02-16 15:26:05] [build-stdout] Siu /opt/codeql/java
+[2025-02-16 15:26:05] [build-stdout] [2025-02-16 15:26:05] Build directory is .
+[2025-02-16 15:26:05] [build-stdout] [2025-02-16 15:26:05] [autobuild] > /home/zerep/Desktop/TFG/UseCase/./mvnw clean package -f pom.xml -B -V -e -Dfindbugs.skip -Dcheckstyle.skip -Dpmd.skip=true -Dspotbugs.skip -Denforcer.skip -Dmaven.javadoc.skip -DskipTests -Dmaven.test.skip.exec -Dlicense.skip=true -Drat.skip=true -Dspotless.check.skip=true
+[2025-02-16 15:26:05] [build-stdout] [2025-02-16 15:26:05] [autobuild] Apache Maven 3.9.7 (8b094c9513efc1b9ce2d952b3b9c8eaedaf8cbf0)
+[2025-02-16 15:26:05] [build-stdout] [2025-02-16 15:26:05] [autobuild] Maven home: /home/zerep/.m2/wrapper/dists/apache-maven-3.9.7-bin/33482774/apache-maven-3.9.7
+[2025-02-16 15:26:05] [build-stdout] [2025-02-16 15:26:05] [autobuild] Java version: 17.0.11, vendor: Ubuntu, runtime: /usr/lib/jvm/java-17-openjdk-amd64
+[2025-02-16 15:26:05] [build-stdout] [2025-02-16 15:26:05] [autobuild] Default locale: en_US, platform encoding: UTF-8
+[2025-02-16 15:26:05] [build-stdout] [2025-02-16 15:26:05] [autobuild] OS name: "linux", version: "6.5.0-44-generic", arch: "amd64", family: "unix"
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] Error stacktraces are turned on.
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] Scanning for projects...
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] 
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] --------------------------< com.umugram:Tfg >---------------------------
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] Building Tfg 0.0.1-SNAPSHOT
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO]   from pom.xml
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] --------------------------------[ jar ]---------------------------------
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [WARNING] The artifact mysql:mysql-connector-java:jar:8.0.33 has been relocated to com.mysql:mysql-connector-j:jar:8.0.33: MySQL Connector/J artifacts moved to reverse-DNS compliant Maven 2+ coordinates.
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] 
+[2025-02-16 15:26:06] [build-stdout] [2025-02-16 15:26:06] [autobuild] [INFO] --- clean:3.3.2:clean (default-clean) @ Tfg ---
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] Deleting /home/zerep/Desktop/TFG/UseCase/target
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] 
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] --- resources:3.3.1:resources (default-resources) @ Tfg ---
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] Copying 1 resource from src/main/resources to target/classes
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] Copying 0 resource from src/main/resources to target/classes
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] 
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] --- compiler:3.13.0:compile (default-compile) @ Tfg ---
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] Recompiling the module because of changed source code.
+[2025-02-16 15:26:07] [build-stdout] [2025-02-16 15:26:07] [autobuild] [INFO] Compiling 13 source files with javac [debug parameters release 17] to target/classes
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] /home/zerep/Desktop/TFG/UseCase/src/main/java/com/umugram/Tfg/repositories/custom/implementations/CustomPostRepositoryImpl.java: /home/zerep/Desktop/TFG/UseCase/src/main/java/com/umugram/Tfg/repositories/custom/implementations/CustomPostRepositoryImpl.java uses unchecked or unsafe operations.
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] /home/zerep/Desktop/TFG/UseCase/src/main/java/com/umugram/Tfg/repositories/custom/implementations/CustomPostRepositoryImpl.java: Recompile with -Xlint:unchecked for details.
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] 
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] --- resources:3.3.1:testResources (default-testResources) @ Tfg ---
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] Copying 1 resource from src/test/resources to target/test-classes
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] 
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ Tfg ---
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] Recompiling the module because of changed dependency.
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] Compiling 3 source files with javac [debug parameters release 17] to target/test-classes
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] -------------------------------------------------------------
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] COMPILATION ERROR : 
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] -------------------------------------------------------------
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[56,48] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[73,48] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[81,37] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[96,48] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[103,37] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] 5 errors 
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] -------------------------------------------------------------
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] ------------------------------------------------------------------------
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] BUILD FAILURE
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] ------------------------------------------------------------------------
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] Total time:  12.320 s
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] Finished at: 2025-02-16T15:26:18+01:00
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [INFO] ------------------------------------------------------------------------
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.13.0:testCompile (default-testCompile) on project Tfg: Compilation failure: Compilation failure: 
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[56,48] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[73,48] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[81,37] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[96,48] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] /home/zerep/Desktop/TFG/UseCase/src/test/java/com/umugram/Tfg/PostRepositoryTests.java:[103,37] cannot find symbol
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   symbol:   method findByUser(com.umugram.Tfg.domain.User)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR]   location: variable postRepository of type com.umugram.Tfg.repositories.PostRepository
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] -> [Help 1]
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.13.0:testCompile (default-testCompile) on project Tfg: Compilation failure
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:333)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.cli.MavenCli.execute (MavenCli.java:904)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:281)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.cli.MavenCli.main (MavenCli.java:204)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:77)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at java.lang.reflect.Method.invoke (Method.java:568)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:361)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:77)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at java.lang.reflect.Method.invoke (Method.java:568)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.wrapper.BootstrapMainStarter.start (BootstrapMainStarter.java:52)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.wrapper.WrapperExecutor.execute (WrapperExecutor.java:161)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.wrapper.MavenWrapperMain.main (MavenWrapperMain.java:73)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] Caused by: org.apache.maven.plugin.compiler.CompilationFailureException: Compilation failure
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.plugin.compiler.AbstractCompilerMojo.execute (AbstractCompilerMojo.java:1309)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.plugin.compiler.TestCompilerMojo.execute (TestCompilerMojo.java:208)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.cli.MavenCli.execute (MavenCli.java:904)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:281)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.cli.MavenCli.main (MavenCli.java:204)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:77)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at java.lang.reflect.Method.invoke (Method.java:568)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:361)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:77)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at java.lang.reflect.Method.invoke (Method.java:568)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.wrapper.BootstrapMainStarter.start (BootstrapMainStarter.java:52)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.wrapper.WrapperExecutor.execute (WrapperExecutor.java:161)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild]     at org.apache.maven.wrapper.MavenWrapperMain.main (MavenWrapperMain.java:73)
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] 
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] 
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] For more information about the errors and possible solutions, please read the following articles:
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [autobuild] [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[2025-02-16 15:26:18] [build-stdout] [2025-02-16 15:26:18] [ERROR] Spawned process exited abnormally (code 1; tried to run: [/home/zerep/Desktop/TFG/UseCase/./mvnw, clean, package, -f, pom.xml, -B, -V, -e, -Dfindbugs.skip, -Dcheckstyle.skip, -Dpmd.skip=true, -Dspotbugs.skip, -Denforcer.skip, -Dmaven.javadoc.skip, -DskipTests, -Dmaven.test.skip.exec, -Dlicense.skip=true, -Drat.skip=true, -Dspotless.check.skip=true])
+[2025-02-16 15:26:19] [ERROR] Spawned process exited abnormally (code 1; tried to run: [/opt/codeql/tools/linux64/preload_tracer, /opt/codeql/java/tools/autobuild.sh])
+[2025-02-16 15:26:19] Exception caught at top level: Exit status 1 from command: [/opt/codeql/java/tools/autobuild.sh]
+                      com.semmle.cli2.Commandline.executeAndCheckResult(Commandline.java:170)
+                      com.semmle.cli2.Commandline.runWithoutReturn(Commandline.java:123)
+                      com.semmle.cli2.database.DatabaseProcessCommandCommon.executeSubcommand(DatabaseProcessCommandCommon.java:227)
+                      com.semmle.cli2.database.TraceCommandCommand.executeSubcommand(TraceCommandCommand.java:126)
+                      com.semmle.cli2.picocli.SubcommandCommon.lambda$executeSubcommandWithMessages$5(SubcommandCommon.java:892)
+                      com.semmle.cli2.picocli.SubcommandCommon.withCompilationMessages(SubcommandCommon.java:444)
+                      com.semmle.cli2.picocli.SubcommandCommon.executeSubcommandWithMessages(SubcommandCommon.java:890)
+                      com.semmle.cli2.picocli.PlumbingRunner.run(PlumbingRunner.java:119)
+                      com.semmle.cli2.picocli.SubcommandCommon.runPlumbingInProcess(SubcommandCommon.java:201)
+                      com.semmle.cli2.database.CreateCommand.executeSubcommand(CreateCommand.java:185)
+                      com.semmle.cli2.picocli.SubcommandCommon.lambda$executeSubcommandWithMessages$5(SubcommandCommon.java:892)
+                      com.semmle.cli2.picocli.SubcommandCommon.withCompilationMessages(SubcommandCommon.java:444)
+                      com.semmle.cli2.picocli.SubcommandCommon.executeSubcommandWithMessages(SubcommandCommon.java:890)
+                      com.semmle.cli2.picocli.SubcommandCommon.toplevelMain(SubcommandCommon.java:777)
+                      com.semmle.cli2.picocli.SubcommandCommon.call(SubcommandCommon.java:757)
+                      com.semmle.cli2.picocli.SubcommandMaker.runMain(SubcommandMaker.java:238)
+                      com.semmle.cli2.picocli.SubcommandMaker.runMain(SubcommandMaker.java:259)
+                      com.semmle.cli2.CodeQL.main(CodeQL.java:115)
