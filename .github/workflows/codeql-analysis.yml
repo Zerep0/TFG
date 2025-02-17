@@ -22,8 +22,6 @@ jobs:
         language: [ 'java' ]
 
     steps:
-    - name: Verificar archivos en UseCase
-      run: find UseCase -name "*.java" || echo "No se encontraron archivos Java en UseCase"
       
     - name: Checkout repository
       uses: actions/checkout@v3
