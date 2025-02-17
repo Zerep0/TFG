@@ -26,8 +26,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Verificar archivos en UseCase
-      run: find UseCase -name "*.java" || echo "No se encontraron archivos Java en UseCase"
+    - name: Build with Maven
+      run: mvn -B package --file UseCase/pom.xml
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
