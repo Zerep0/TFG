@@ -19,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        language: [ 'java' ]
+        language: [ 'java-kotlin' ]
 
     steps:
       
