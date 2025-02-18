@@ -19,7 +19,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, CustomPostRep
     TreeSet<Post> findAllLessUsers();
 
     @Query("SELECT Post FROM Post Post WHERE Post.id < :id")
-    HashSet<Post> findAllLessUsers2(@Param("amount") Long id);
+    HashSet<Post> findAllLessUsers2(@Param("id") Long id);
 
     @Query("DELETE FROM Post Post WHERE Post.caption = :caption")
     void deleteByCaption(@Param("caption") String caption);
