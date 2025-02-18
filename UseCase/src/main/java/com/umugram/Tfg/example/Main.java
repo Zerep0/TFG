@@ -7,6 +7,7 @@ import com.umugram.Tfg.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import com.umugram.Tfg.domain.Image;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Main implements CommandLineRunner
         postRepository.deleteAll();
 
         PhotoPost photoPost = new PhotoPost();
-        List<String> images = List.of("https://www.google.com");
+        List<Image> images = List.of(new Image("https://www.google.com"));
         photoPost.setImages(images);
         photoPost.setCaption("This is a photo post");
         postRepository.save(photoPost);
@@ -35,10 +36,10 @@ public class Main implements CommandLineRunner
 
         List<Post> posts = postRepository.findAll();
 
-        postRepository.findAllLessUsers().forEach(System.out::println);
+        /*postRepository.findAllLessUsers().forEach(System.out::println);
         postRepository.findAllShortsComments().forEach(System.out::println);
         postRepository.findAllLessUsers2(50L).forEach(System.out::println);
-        postRepository.deleteByCaption("This is a photo post");
+        postRepository.deleteByCaption("This is a photo post");*/
 
 
         System.out.println("Posts:");

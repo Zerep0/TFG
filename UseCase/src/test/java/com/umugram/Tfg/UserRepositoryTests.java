@@ -11,7 +11,7 @@ import com.umugram.Tfg.repositories.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
-@SpringBootTest
+@SpringBootTest(classes = TfgApplication.class)
 class UserRepositoryTests {
 
 	@Autowired

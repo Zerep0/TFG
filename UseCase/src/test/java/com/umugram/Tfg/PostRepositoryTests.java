@@ -13,10 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 
-@SpringBootTest
+@SpringBootTest(classes = TfgApplication.class)
 public class PostRepositoryTests {
 
     @Autowired
@@ -47,7 +48,9 @@ public class PostRepositoryTests {
         // Arrange
     	
         // Act
-        Post post = new PhotoPost("Manuel's post");
+        LinkedList<Image> images = new LinkedList<>();
+        images.add(new Image("https://www.google.com"));
+        Post post = new PhotoPost("Manuel's post",images);
         post.setDescription("This is a post of Manuel");
         manuel.uploadPosts(post);
 
@@ -64,7 +67,9 @@ public class PostRepositoryTests {
     void deletePost()
     {
         // Arrange
-        Post post = new PhotoPost("Manuel's post");
+        LinkedList<Image> images = new LinkedList<>();
+        images.add(new Image("https://www.google.com"));
+        Post post = new PhotoPost("Manuel's post",images);
         post.setDescription("This is a post of Manuel");
         manuel.uploadPosts(post);
         postRepository.saveAndFlush(post);
@@ -87,7 +92,9 @@ public class PostRepositoryTests {
     void deleteUserWithPosts()
     {
         // Arrange
-        Post post = new PhotoPost("Manuel's post");
+        LinkedList<Image> images = new LinkedList<>();
+        images.add(new Image("https://www.google.com"));
+        Post post = new PhotoPost("Manuel's post",images);
         post.setDescription("This is a post of Manuel");
         post = postRepository.save(post);
         manuel.uploadPosts(post);
