@@ -29,6 +29,10 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file UseCase/pom.xml
 
+    - name: List files after Maven build
+      run: |
+        ls -R UseCase/
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
