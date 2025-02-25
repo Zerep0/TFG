@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQuery(name = "Post.findAllShortsComments", query = "SELECT p FROM Post p WHERE LENGTH(p.caption) <= 20")
-@NamedQuery(name = "Post.findAllLessUsers", query = "SELECT p FROM Post p WHERE p.id < 50")
+@NamedQuery(name = "Post.findAllLessUsers", query = "SELECT p FROM Post p WHERE p.id < 1000")
 public abstract class Post {
 
     @Id

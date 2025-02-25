@@ -21,7 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@EntityGraph(value = "uploadPosts", type = EntityGraph.EntityGraphType.LOAD)
 	User findWithPostsByUsername(String username);
-	
 
 }
 

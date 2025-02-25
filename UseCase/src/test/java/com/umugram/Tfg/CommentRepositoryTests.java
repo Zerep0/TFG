@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 
 @SpringBootTest(classes = TfgApplication.class)
 public class CommentRepositoryTests {
@@ -58,9 +57,7 @@ public class CommentRepositoryTests {
     void commentPost()
     {
         // Arrange
-        LinkedList<Image> images = new LinkedList<>();
-        images.add(new Image("https://www.google.com"));
-        Post post = new PhotoPost("Manuel's post",images);
+        Post post = new PhotoPost("Manuel's post","https://www.google.com");
         post.setDescription("This is a post of Manuel");
         postRepository.saveAndFlush(post);
         manuel.uploadPosts(post);
@@ -79,9 +76,7 @@ public class CommentRepositoryTests {
     void replyComment()
     {
         // Arrange
-        LinkedList<Image> images = new LinkedList<>();
-        images.add(new Image("https://www.google.com"));
-        Post post = new PhotoPost("Manuel's post",images);
+        Post post = new PhotoPost("Manuel's post","https://www.google.com");
         post.setDescription("This is a post of Manuel");
         postRepository.saveAndFlush(post);
         manuel.uploadPosts(post);
@@ -103,9 +98,7 @@ public class CommentRepositoryTests {
     @Test
     void replyCommentAfterDeleteParent() {
         // Arrange
-        LinkedList<Image> images = new LinkedList<>();
-        images.add(new Image("https://www.google.com"));
-        Post post = new PhotoPost("Manuel's post",images);
+        Post post = new PhotoPost("Manuel's post","https://www.google.com");
         post.setDescription("This is a post of Manuel");
         postRepository.saveAndFlush(post);
         manuel.uploadPosts(post);

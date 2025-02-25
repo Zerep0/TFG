@@ -30,7 +30,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         Query q = entityManager.createNamedQuery(p);
         return q.getResultList();
     }
-    // ahora tipada
+
     @Override
     public List<Post> cnFindAllShortsComments()
     {

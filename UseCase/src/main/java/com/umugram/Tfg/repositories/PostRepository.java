@@ -19,9 +19,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, CustomPostRep
     @Query(name = "Post.findAllShortsComments")
     List<Post> findAllShortsComments();
 
-    @Query(name = "Post.findAllLessUsers")
-    HashSet<Post> findAllLessUsers();
-
     @Query("SELECT Post FROM Post Post WHERE Post.id < :id")
     HashSet<Post> findAllLessUsers2(@Param("id") Long id);
 

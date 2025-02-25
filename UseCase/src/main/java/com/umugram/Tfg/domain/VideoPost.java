@@ -6,7 +6,17 @@ import jakarta.persistence.Entity;
 public class VideoPost extends Post {
 
     private String videoUrl;
-    private int duration;
+    private double duration;
+    private double lastMinute;
+
+    public VideoPost(String caption, String videoUrl, double duration) {
+        super(caption);
+        this.videoUrl = videoUrl;
+        this.duration = duration;
+        lastMinute = 0;
+    }
+
+    public VideoPost(){}
 
     // Getters y Setters
 
@@ -18,12 +28,20 @@ public class VideoPost extends Post {
         this.videoUrl = videoUrl;
     }
 
-    public int getDuration() {
+    public double getDuration() {
         return duration;
     }
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public double getLastMinute() {
+        return lastMinute;
+    }
+
+    public void setLastMinute(double lastMinute) {
+        this.lastMinute = lastMinute;
     }
 
 }

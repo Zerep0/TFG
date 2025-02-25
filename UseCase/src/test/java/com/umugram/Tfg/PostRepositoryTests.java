@@ -48,9 +48,7 @@ public class PostRepositoryTests {
         // Arrange
     	
         // Act
-        LinkedList<Image> images = new LinkedList<>();
-        images.add(new Image("https://www.google.com"));
-        Post post = new PhotoPost("Manuel's post",images);
+        Post post = new PhotoPost("Manuel's post","https://www.google.com");
         post.setDescription("This is a post of Manuel");
         manuel.uploadPosts(post);
 
@@ -67,9 +65,7 @@ public class PostRepositoryTests {
     void deletePost()
     {
         // Arrange
-        LinkedList<Image> images = new LinkedList<>();
-        images.add(new Image("https://www.google.com"));
-        Post post = new PhotoPost("Manuel's post",images);
+        Post post = new PhotoPost("Manuel's post","https://www.google.com");
         post.setDescription("This is a post of Manuel");
         manuel.uploadPosts(post);
         postRepository.saveAndFlush(post);
@@ -92,9 +88,7 @@ public class PostRepositoryTests {
     void deleteUserWithPosts()
     {
         // Arrange
-        LinkedList<Image> images = new LinkedList<>();
-        images.add(new Image("https://www.google.com"));
-        Post post = new PhotoPost("Manuel's post",images);
+        Post post = new PhotoPost("Manuel's post","https://www.google.com");
         post.setDescription("This is a post of Manuel");
         post = postRepository.save(post);
         manuel.uploadPosts(post);
