@@ -49,4 +49,5 @@ jobs:
       run: |
         echo "Yodawg what a test..."
         echo "Let's try to cat the SARIF file"
-        cat /home/runner/work/code-scan/results/java.sarif
+        cat /home/runner/work/Umugram/results/java.sarif
+        

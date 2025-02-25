@@ -4,7 +4,7 @@
  * @kind problem
  * @name Deleted Entity 
  * @description Detects when an jpql query uses a deleted entity.
- * @problem.severity error
+ * @problem.severity warning
  */
 
  import java
