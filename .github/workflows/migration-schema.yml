@@ -98,10 +98,11 @@ jobs:
         if: steps.parse_msg.outputs.action == 'cancel'
         run: |
           # Remove the .orion file from the repository
-          ORION_FILE="${{ steps.parse_msg.outputs.schema_path }}"
+          ORION_FILE="${{ steps.parse_msg.outputs.schema_name }}"
           if [ -f "$ORION_FILE" ]; then
-            rm "$ORION_FILE"
-            echo "Removed .orion file: $ORION_FILE"
+            rm -f "$ORION_FILE"
+            git add -A  # Staging explicitly both additions and deletions
+            echo "Removed and staged deletion of file: $ORION_FILE"
           else
             echo "Warning: .orion file not found at $ORION_FILE"
           fi
