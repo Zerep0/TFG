@@ -1,0 +1,12 @@
+Umugram operations
+
+USING Umugram:1
+
+// Schema Type operations
+
+RENAME ENTITY User TO UserUmugram
+
+DELETE ENTITY Post
+
+
+
