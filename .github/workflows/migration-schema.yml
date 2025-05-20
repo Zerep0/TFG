@@ -6,6 +6,7 @@ on:
 
 jobs:
   version:
+    if: startsWith(github.event.head_commit.message, 'orion')
     runs-on: ubuntu-latest
     permissions:
       contents: write
