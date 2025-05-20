@@ -66,10 +66,9 @@ jobs:
             >> db/version_table.md
 
       - name: Commit changes
+        if: steps.check_msg.outputs.schema
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore: schema v${{ steps.bump.outputs.next }} accept ${{ steps.check_msg.outputs.schema }}"
-          file_pattern: |
-            db/orion_schema_version.txt
-            db/version_table.md
-            db/migrations/**
+          file_pattern: "."            # ahora pilla todo lo que esté staged
+          push_options: "--force-with-lease"
