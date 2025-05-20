@@ -2,8 +2,7 @@ name: "Orion Schema Versioning"
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   version:
@@ -13,8 +12,7 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           persist-credentials: true
 
@@ -35,21 +33,19 @@ jobs:
       - name: Ensure db and version files
         run: |
           mkdir -p db/migrations
-          # initialize version file with -1 if missing
           if [ ! -f db/orion_schema_version.txt ]; then
             echo "-1" > db/orion_schema_version.txt
           fi
-          # initialize version table if missing
           if [ ! -f db/version_table.md ]; then
-            cat > db/version_table.md << 'EOF'
-# Orion Schema Version History
+            cat > db/version_table.md <<EOF
+            # Orion Schema Version History
 
-| Version | Fichero `.orion` | Descripción | Fecha | Commit SHA |
-|:-------:|:-----------------|:-----------:|:-----:|:----------:|
-EOF
+            | Version | Fichero \`.orion\` | Descripción | Fecha | Commit SHA |
+            |:-------:|:-----------------|:-----------:|:-----:|:----------:|
+          EOF
           fi
 
-      - name: Bump or set version
+      - name: Bump version
         id: bump
         run: |
           CUR=$(cat db/orion_schema_version.txt)
