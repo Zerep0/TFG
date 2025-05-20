@@ -55,15 +55,15 @@ jobs:
 
       - name: Append new row to version_table.md
         run: |
-          V=${{ steps.bump.outputs.next }}
-          SCHEMA=${{ steps.check_msg.outputs.schema }}
-          DESC=${{ steps.check_msg.outputs.description }}
-          DATE=$(date '+%Y-%m-%d %H:%M %Z')
-          SHA=${GITHUB_SHA::7}
+          V="${{ steps.bump.outputs.next }}"
+          SCHEMA="${{ steps.check_msg.outputs.schema }}"
+          DESC="${{ steps.check_msg.outputs.description }}"
+          DATE="$(date '+%Y-%m-%d %H:%M %Z')"
+          SHA="${GITHUB_SHA::7}"
           printf "| %s | %s | %s | %s | %s |\n" \
             "$V" "$SCHEMA" "$DESC" "$DATE" "$SHA" \
             >> db/version_table.md
-
+            
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
