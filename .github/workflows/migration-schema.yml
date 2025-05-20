@@ -22,12 +22,11 @@ jobs:
         run: |
           MSG="${{ github.event.head_commit.message }}"
           echo "Commit message: $MSG"
-          if [[ ! "$MSG" =~ ^orion\(accept\):\ [^ ]+\.orion$ ]]; then
+          if ! echo "$MSG" | grep -qE '^orion\(accept\): [^ ]+\.orion$'; then
             echo "Not an accept commit – skipping."
             exit 78
           fi
-          # Extraemos el nombre del fichero .orion
-          NAME=$(echo "$MSG" | sed -E 's/^orion\(accept\):\ (.+)$/\1/')
+          NAME=$(echo "$MSG" | awk '{ print $2 }')
           echo "schema=$NAME" >> $GITHUB_OUTPUT
 
       - name: Ensure db structure
@@ -49,5 +48,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore: schema version v${{ steps.bump.outputs.next }} (${{ steps.check_msg.outputs.schema }})"
-          file_pattern: |
-            db/orion_schema_version.txt
+          file_pattern: db/orion_schema_version.txt
