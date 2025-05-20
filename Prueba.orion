@@ -8,4 +8,6 @@ RENAME ENTITY VideoPost TO ContentPost
 
 DELETE ENTITY Post
 
+CAST ATTR VideoPost::duration, lastMinute TO Number
+
 
