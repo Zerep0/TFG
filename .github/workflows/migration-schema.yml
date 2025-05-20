@@ -19,8 +19,21 @@ jobs:
       - name: Detect changed .orion
         id: detect_orion
         run: |
-          # Ruta relativa al .orion modificado
-          SCRIPT=$(git show --name-only --pretty="" $GITHUB_SHA | grep '\.orion$' || true)
+          # Extraer nombre del esquema del mensaje de commit
+          MSG="${{ github.event.head_commit.message }}"
+          SCHEMA_NAME=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\): ([^,]+).*$/\2/')
+          
+          # Buscar el archivo .orion en el commit actual Y anterior
+          SCRIPT=$(git ls-files | grep -F "$SCHEMA_NAME" || true)
+          
+          # Si no se encuentra en el commit actual, buscar en el commit anterior
+          if [ -z "$SCRIPT" ]; then
+            SCRIPT=$(git ls-files --with-tree=HEAD^ | grep -F "$SCHEMA_NAME" || true)
+            echo "Encontrado en commit anterior: $SCRIPT"
+          else
+            echo "Encontrado en commit actual: $SCRIPT"
+          fi
+          
           echo "script=$SCRIPT" >> $GITHUB_OUTPUT
 
       - name: Parse commit message
@@ -33,8 +46,11 @@ jobs:
           fi
           ACTION=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\):.*$/\1/')
           SCHEMA_PATH="${{ steps.detect_orion.outputs.script }}"
-          SCHEMA_NAME=$(basename "$SCHEMA_PATH")
-          DESC=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\): [^,]+,?(.*)$/\1/')
+          SCHEMA_NAME=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\): ([^,]+).*$/\2/')
+          
+          # Corregir la extracción de descripción - usar \2 en lugar de \1
+          DESC=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\): [^,]+,?(.*)$/\2/')
+          
           echo "action=$ACTION"        >> $GITHUB_OUTPUT
           echo "schema_path=$SCHEMA_PATH" >> $GITHUB_OUTPUT
           echo "schema_name=$SCHEMA_NAME" >> $GITHUB_OUTPUT
