@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      # (para poder commitear el version file y la migración)
 
     steps:
       - name: Checkout repository
@@ -19,32 +18,32 @@ jobs:
         with:
           persist-credentials: true
 
-      - name: Initialize version file and migrations folder
+      - name: Initialize db folder, version file and migrations directory
         run: |
-          # Si no existe el fichero de versión, créalo en la raíz con “0”
-          if [ ! -f orion_schema_version.txt ]; then
-            echo "0" > orion_schema_version.txt
-            echo "Created orion_schema_version.txt with initial version 0"
+          # Ensure db/ directory exists
+          if [ ! -d db ]; then
+            mkdir db
+            echo "Created db directory"
           fi
 
-          # Si no existe la carpeta db/migrations, créala
+          # If version file doesn't exist under db/, create it with “0”
+          if [ ! -f db/orion_schema_version.txt ]; then
+            echo "0" > db/orion_schema_version.txt
+            echo "Created db/orion_schema_version.txt with initial version 0"
+          fi
+
+          # Ensure db/migrations/ directory exists
           if [ ! -d db/migrations ]; then
             mkdir -p db/migrations
             echo "Created db/migrations directory"
           fi
 
-      - name: Commit initial version file if created
+      - name: Commit initial db structure if created
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore: initialize schema version and migrations folder"
+          commit_message: "chore: initialize db/orion_schema_version.txt and db/migrations/"
           file_pattern: |
-            orion_schema_version.txt
+            db/orion_schema_version.txt
             db/migrations/**
 
-      # ( Aquí irían luego tus pasos de bump de versión, generación de migraciones, aplicación, etc. )
-
-
-
-
-
-
+      # Aquí irían tus pasos de bump de versión, generación y aplicación de migraciones…
