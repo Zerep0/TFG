@@ -94,7 +94,7 @@ jobs:
           SHA="${GITHUB_SHA::7}"
           printf "| %s | %s | %s | %s | %s |\n" \
             "$PREV" \
-            "${{ steps.parse_msg.outputs.schema_name }}" \
+            "V${PREV}_${{ steps.parse_msg.outputs.schema_name }}" \
             "${{ steps.parse_msg.outputs.description }}" \
             "$DATE" \
             "$SHA" \
