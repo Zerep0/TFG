@@ -32,7 +32,7 @@ public class VideoPost extends Post {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(double duration) {
         this.duration = duration;
     }
 

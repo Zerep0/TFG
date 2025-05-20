@@ -3,51 +3,60 @@ name: "CodeQL"
 on:
   push:
     paths:
-        - '**.orion'
+      - '**/*.orion'
 
 jobs:
   analyze:
-
     name: Analyze
-
     runs-on: ubuntu-latest
-
     permissions:
       actions: read
       contents: read
       security-events: write
-
     strategy:
       matrix:
         language: [ 'java-kotlin' ]
 
     steps:
-      
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        config-file: ./.github/codeql/codeql-config.yml
+      - name: Find .orion in current commit
+        id: find_orion
+        run: |
+          SCRIPT=$(git show --name-only --pretty="" $GITHUB_SHA \
+                    | grep '\.orion$' || true)
+          echo "::set-output name=script::$SCRIPT"
 
-    - name: Build with Maven
-      run: mvn -B package --file UseCase/pom.xml
+      - name: Clean old generated queries
+        run: rm -rf .github/codeql/queries/*
 
-    - name: List files after Maven build
-      run: |
-        ls -R UseCase/
+      - name: Generate CodeQL queries
+        run: |
+          echo "Generating queries for ${{ steps.find_orion.outputs.script }}"
+          java --add-opens java.base/java.lang=ALL-UNNAMED \
+               -jar .github/codeql/predictor.jar \
+               -i "${{ steps.find_orion.outputs.script }}" \
+               -o .github/codeql/queries
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          config-file: ./.github/codeql/codeql-config.yml
 
-    - name: Echo results
-      run: |
-        echo "Yodawg what a test..."
-        echo "Let's try to cat the SARIF file"
-        cat /home/runner/work/Umugram/results/java.sarif
-        
+      - name: Build with Maven
+        run: mvn -B package --file UseCase/pom.xml
+
+      - name: List files after Maven build
+        run: ls -R UseCase/
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+
+      - name: Echo results
+        run: |
+          echo "Analysis complete; SARIF output:"
+          cat /home/runner/work/${{ github.repository }}/results/${{ matrix.language }}.sarif

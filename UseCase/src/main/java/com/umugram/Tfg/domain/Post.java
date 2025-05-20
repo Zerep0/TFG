@@ -1,12 +1,14 @@
 package com.umugram.Tfg.domain;
 
 import jakarta.persistence.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQuery(name = "Post.findAllShortsComments", query = "SELECT p FROM Post p WHERE LENGTH(p.caption) <= 20")
 @NamedQuery(name = "Post.findAllLessUsers", query = "SELECT p FROM Post p WHERE p.id < 1000")
-public abstract class Post {
+public abstract class Post extends MetaInfo { 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +21,11 @@ public abstract class Post {
     @Lob
     private String description;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
     public Post() {
+        comments = new ArrayList<>();
     }
 
     public Post(String caption)
@@ -58,6 +64,14 @@ public abstract class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
