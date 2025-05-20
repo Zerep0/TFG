@@ -6,6 +6,6 @@ USING Umugram:1
 
 RENAME ENTITY VideoPost TO ContentPost
 
-DELETE ENTITY Post
+DELETE ENTITY Post 
 
 
