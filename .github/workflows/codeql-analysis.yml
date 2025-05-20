@@ -29,7 +29,12 @@ jobs:
           CHANGED=$(git show --name-status --pretty="" $GITHUB_SHA \
                     | grep -E '^[AM]\s+.*\.orion$' \
                     | awk '{print $2}' || true)
-          echo "script=$CHANGED" >> $GITHUB_OUTPUT
+          {
+            echo "script<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+          
           if [ -z "$CHANGED" ]; then
             echo "run=false" >> $GITHUB_OUTPUT
           else
