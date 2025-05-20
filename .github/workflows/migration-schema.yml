@@ -77,26 +77,13 @@ jobs:
           CUR=$(cat db/orion_schema_version.txt)
           NEXT=$((CUR + 1))
           echo "$NEXT" > db/orion_schema_version.txt
-          echo "Version incrementada: $NEXT"
-          
+
           # 2) archive previous .orion
           PREV=$CUR
           mkdir -p db/orion_scripts
-          # Verificar si el archivo existe en HEAD^
-          if git show HEAD^:"${{ steps.parse_msg.outputs.schema_name }}" &>/dev/null; then
-            echo "Archivo encontrado en commit anterior, archivando..."
-            git show HEAD^:"${{ steps.parse_msg.outputs.schema_name }}" > "db/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}"
-            echo "Contenido del archivo archivado:"
-            cat "db/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}"
-          else
-            echo "ADVERTENCIA: No se encontró el archivo en el commit anterior"
-            # Intentar con el archivo actual si está disponible
-            if [ -f "${{ steps.parse_msg.outputs.schema_name }}" ]; then
-              cp "${{ steps.parse_msg.outputs.schema_name }}" "db/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}"
-              echo "Se archivó el archivo del commit actual"
-            fi
-          fi
-          
+          git show HEAD^:"${{ steps.parse_msg.outputs.schema_path }}" \
+            > db/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}
+
           # 3) append row to table
           DATE="$(date '+%Y-%m-%d %H:%M %Z')"
           SHA="${GITHUB_SHA::7}"
@@ -108,14 +95,9 @@ jobs:
             "$SHA" \
             >> db/version_table.md
           
-          # 4) Verificar lo que tenemos
-          echo "===== Verificaciones ====="
-          echo "Contenido de version_table.md:"
-          cat db/version_table.md
-          echo "Archivos en db/orion_scripts:"
-          ls -la db/orion_scripts/
-          echo "Status de git:"
-          git status
+          # 4) Preparar todos los cambios para el commit
+          git add -A  # Staging explicitly all changes
+          echo "Todos los cambios han sido preparados para el commit"
 
       - name: Handle cancel
         if: steps.parse_msg.outputs.action == 'cancel'
