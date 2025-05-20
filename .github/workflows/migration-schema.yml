@@ -87,7 +87,7 @@ jobs:
           # 3) append row to table
           DATE="$(date '+%Y-%m-%d %H:%M %Z')"
           SHA="${GITHUB_SHA::7}"
-          printf "| %s | %s | %s | %s | %s | %s |\n" \
+          printf "| %s | %s | %s | %s | %s |\n" \
             "$NEXT" \
             "${{ steps.parse_msg.outputs.schema_name }}" \
             "${{ steps.parse_msg.outputs.description }}" \
