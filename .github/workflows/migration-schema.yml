@@ -36,13 +36,14 @@ jobs:
           if [ ! -f db/orion_schema_version.txt ]; then
             echo "-1" > db/orion_schema_version.txt
           fi
-          if [ ! -f db/version_table.md ]; then
-            cat > db/version_table.md <<-EOF
-            # Orion Schema Version History
 
-            | Version | Fichero \`.orion\` | Descripción | Fecha | Commit SHA |
-            |:-------:|:-----------------|:-----------:|:-----:|:----------:|
-            EOF
+          if [ ! -f db/version_table.md ]; then
+            echo "# Orion Schema Version History"                       > db/version_table.md
+            echo ""                                                    >> db/version_table.md
+            echo "| Version | Fichero \`.orion\` | Descripción | Fecha | Commit SHA |" \
+                                                                     >> db/version_table.md
+            echo "|:-------:|:-----------------|:-----------:|:-----:|:----------:|" \
+                                                                     >> db/version_table.md
           fi
 
       - name: Bump version
