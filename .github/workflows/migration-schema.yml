@@ -33,7 +33,7 @@ jobs:
         run: |
           mkdir -p db/migrations
           if [ ! -f db/orion_schema_version.txt ]; then
-            echo "0" > db/orion_schema_version.txt
+            echo "-1" > db/orion_schema_version.txt
           fi
 
       - name: Bump version
