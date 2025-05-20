@@ -54,24 +54,22 @@ jobs:
           echo "$NEXT" > db/orion_schema_version.txt
           echo "next=$NEXT" >> $GITHUB_OUTPUT
 
-      - name: Extract previous .orion into orion_scripts
+      - name: Extract previous `.orion` into db/orion_scripts
         if: steps.check_msg.outputs.schema
         run: |
-          # Parámetros
-          SCHEMA="${{ steps.check_msg.outputs.schema }}"        # ej. "prueba.orion"
-          V="${{ steps.bump.outputs.next }}"                     # versión recién creada
+          SCRIPT="${{ steps.detect_orion.outputs.script }}"     # ruta completa del .orion
+          BASENAME=$(basename "$SCRIPT")                        # sólo el nombre de fichero
+          V="${{ steps.bump.outputs.next }}"
+          PREV=$((V - 1))
           mkdir -p db/orion_scripts
 
-          # Nombre de fichero de script go-to:
-          #   version anterior = V-1
-          PREV=$((V - 1))
-          DEST="db/orion_scripts/V${PREV}__${SCHEMA}"
-
-          # Extraemos el .orion del padre (HEAD^)
-          git show HEAD^:UseCase/"$SCHEMA" > "$DEST"
-
-          echo "Saved previous schema to $DEST"
-       
+          if [ "$PREV" -ge 0 ]; then
+            DEST="db/orion_scripts/V${PREV}_${BASENAME}"
+            git show HEAD^:"$SCRIPT" > "$DEST"
+            echo "Saved previous schema ($SCRIPT) to $DEST"
+          else
+            echo "No previous version to extract (PREV=$PREV), skipping."
+          fi
 
       - name: Append new row to version_table.md
         run: |
