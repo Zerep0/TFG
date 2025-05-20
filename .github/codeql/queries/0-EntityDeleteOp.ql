@@ -4,7 +4,7 @@
  * @name Deleted Entity
  * @kind alert
  * @problem.severity warning
- * @id java/orion/entity-deleted/1
+ * @id java/orion/entity-deleted/0
  */
  
 import java
@@ -12,7 +12,7 @@ import utils
 
 from Class entity, Location usageLoc, string message
 where
-  entity.hasName("Post") and
+  entity.hasName("User") and
   isEntity(entity) and
   (
     (usageLoc = entity.getLocation() and
