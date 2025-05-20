@@ -6,7 +6,7 @@ on:
       - '**/*.orion'
 
 jobs:
-  analyze: 
+  analyze:
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
@@ -24,7 +24,6 @@ jobs:
       - name: Detect added or modified .orion
         id: detect_orion
         run: |
-          # List only added (A) or modified (M) .orion files in this commit
           CHANGED=$(git show --name-status --pretty="" $GITHUB_SHA \
                     | grep -E '^[AM]\s+.*\.orion$' \
                     | awk '{print $2}' || true)
@@ -39,7 +38,7 @@ jobs:
         if: steps.detect_orion.outputs.run == 'false'
         run: |
           echo "No .orion files added or modified — skipping."
-      
+
       - name: Clean old generated queries
         if: steps.detect_orion.outputs.run == 'true'
         run: rm -rf .github/codeql/queries/*
@@ -73,9 +72,10 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
+          output: results.sarif
 
       - name: Echo results
         if: steps.detect_orion.outputs.run == 'true'
         run: |
           echo "Analysis complete; SARIF output:"
-          cat /home/runner/work/${{ github.repository }}/results/${{ matrix.language }}.sarif
+          cat results.sarif
