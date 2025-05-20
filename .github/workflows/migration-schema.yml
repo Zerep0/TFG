@@ -23,15 +23,13 @@ jobs:
           MSG="${{ github.event.head_commit.message }}"
           SCHEMA_NAME=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\): ([^,]+).*$/\2/')
           
-          # Buscar el archivo .orion en el commit actual Y anterior
-          SCRIPT=$(git ls-files | grep -F "$SCHEMA_NAME" || true)
+          # Buscar el archivo .orion SIEMPRE en el commit anterior
+          SCRIPT=$(git ls-files --with-tree=HEAD^ | grep -F "$SCHEMA_NAME" || true)
           
-          # Si no se encuentra en el commit actual, buscar en el commit anterior
           if [ -z "$SCRIPT" ]; then
-            SCRIPT=$(git ls-files --with-tree=HEAD^ | grep -F "$SCHEMA_NAME" || true)
-            echo "Encontrado en commit anterior: $SCRIPT"
+            echo "Advertencia: No se encontró el archivo $SCHEMA_NAME en el commit anterior"
           else
-            echo "Encontrado en commit actual: $SCRIPT"
+            echo "Encontrado en commit anterior: $SCRIPT"
           fi
           
           echo "script=$SCRIPT" >> $GITHUB_OUTPUT
@@ -61,12 +59,12 @@ jobs:
           mkdir -p db/migrations db/orion_scripts
           [ -f db/orion_schema_version.txt ] || echo "-1" > db/orion_schema_version.txt
           if [ ! -f db/version_table.md ]; then
-            cat > db/version_table.md <<EOF
-          # Orion Schema Version History
-
-          | Version | Fichero \`.orion\` | Acción | Descripción | Fecha | Commit SHA |
-          |:-------:|:-----------------|:------:|:-----------:|:-----:|:----------:|
-          EOF
+            echo "# Orion Schema Version History"                       > db/version_table.md
+            echo ""                                                    >> db/version_table.md
+            echo "| Version | Fichero \`.orion\` | Descripción | Fecha | Commit SHA |" \
+                                                                     >> db/version_table.md
+            echo "|:-------:|:-----------------|:-----------:|:-----:|:----------:|" \
+                                                                     >> db/version_table.md
           fi
 
       - name: Handle accept
