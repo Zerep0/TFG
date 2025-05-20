@@ -21,42 +21,61 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Find .orion in current commit
-        id: find_orion
+      - name: Detect added or modified .orion
+        id: detect_orion
         run: |
-          SCRIPT=$(git show --name-only --pretty="" $GITHUB_SHA \
-                    | grep '\.orion$' || true)
-          echo "::set-output name=script::$SCRIPT"
+          # List only added (A) or modified (M) .orion files in this commit
+          CHANGED=$(git show --name-status --pretty="" $GITHUB_SHA \
+                    | grep -E '^[AM]\s+.*\.orion$' \
+                    | awk '{print $2}' || true)
+          echo "script=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "run=false" >> $GITHUB_OUTPUT
+          else
+            echo "run=true" >> $GITHUB_OUTPUT
+          fi
 
+      - name: Skip if no new or modified .orion
+        if: steps.detect_orion.outputs.run == 'false'
+        run: |
+          echo "No .orion files added or modified — skipping."
+      
       - name: Clean old generated queries
+        if: steps.detect_orion.outputs.run == 'true'
         run: rm -rf .github/codeql/queries/*
 
       - name: Generate CodeQL queries
+        if: steps.detect_orion.outputs.run == 'true'
         run: |
-          echo "Generating queries for ${{ steps.find_orion.outputs.script }}"
+          echo "Generating queries for ${{ steps.detect_orion.outputs.script }}"
           java --add-opens java.base/java.lang=ALL-UNNAMED \
                -jar .github/codeql/predictor.jar \
-               -i "${{ steps.find_orion.outputs.script }}" \
+               -i "${{ steps.detect_orion.outputs.script }}" \
                -o .github/codeql/queries
 
       - name: Initialize CodeQL
+        if: steps.detect_orion.outputs.run == 'true'
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
 
       - name: Build with Maven
+        if: steps.detect_orion.outputs.run == 'true'
         run: mvn -B package --file UseCase/pom.xml
 
       - name: List files after Maven build
+        if: steps.detect_orion.outputs.run == 'true'
         run: ls -R UseCase/
 
       - name: Perform CodeQL Analysis
+        if: steps.detect_orion.outputs.run == 'true'
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
 
       - name: Echo results
+        if: steps.detect_orion.outputs.run == 'true'
         run: |
           echo "Analysis complete; SARIF output:"
           cat /home/runner/work/${{ github.repository }}/results/${{ matrix.language }}.sarif
