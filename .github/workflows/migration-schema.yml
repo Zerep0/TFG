@@ -67,6 +67,8 @@ jobs:
             echo "|:-------:|:-----------------|:-----------:|:-----:|:----------:|" \
                                                                      >> db/version_table.md
           fi
+          cat db/orion_schema_version.txt
+          cat db/version_table.md
 
       - name: Handle accept
         if: steps.parse_msg.outputs.action == 'accept'
