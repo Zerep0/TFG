@@ -1,0 +1,11 @@
+GameTracker_ops operations
+
+USING GameTracker:1
+
+// Schema Type operations
+
+RENAME ENTITY Video TO VideoPost
+
+DELETE ENTITY Post
+
+
