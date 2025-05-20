@@ -63,7 +63,7 @@ jobs:
           PREV=$((V - 1))
           mkdir -p db/orion_scripts
 
-          if [ "$PREV" -ge 0 ]; then
+          if [ "$PREV" -ge -1 ]; then
             DEST="db/orion_scripts/V${PREV}_${BASENAME}"
             git show HEAD^:"$SCRIPT" > "$DEST"
             echo "Saved previous schema ($SCRIPT) to $DEST"
