@@ -12,7 +12,7 @@ import utils
 
 from Class entity, Location usageLoc, string message
 where
-  entity.hasName("User") and
+  entity.hasName("PhotoPost") and
   isEntity(entity) and
   (
     (usageLoc = entity.getLocation() and
