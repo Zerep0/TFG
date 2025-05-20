@@ -78,4 +78,4 @@ jobs:
         if: steps.detect_orion.outputs.run == 'true'
         run: |
           echo "Analysis complete; SARIF output:"
-          cat results.sarif
+          cat results.sarif/java.sarif
