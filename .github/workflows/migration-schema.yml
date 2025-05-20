@@ -90,7 +90,6 @@ jobs:
           printf "| %s | %s | %s | %s | %s | %s |\n" \
             "$NEXT" \
             "${{ steps.parse_msg.outputs.schema_name }}" \
-            "accept" \
             "${{ steps.parse_msg.outputs.description }}" \
             "$DATE" \
             "$SHA" \
