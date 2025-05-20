@@ -4,6 +4,6 @@ USING Umugram:1
 
 // Schema Type operations 
 
-RENAME ENTITY VideoPost TO ContentPost 
+RENAME ENTITY VideoPost TO ContentPost
 
 
