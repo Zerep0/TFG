@@ -37,12 +37,12 @@ jobs:
             echo "-1" > db/orion_schema_version.txt
           fi
           if [ ! -f db/version_table.md ]; then
-            cat > db/version_table.md <<EOF
+            cat > db/version_table.md <<-EOF
             # Orion Schema Version History
 
             | Version | Fichero \`.orion\` | Descripción | Fecha | Commit SHA |
             |:-------:|:-----------------|:-----------:|:-----:|:----------:|
-          EOF
+            EOF
           fi
 
       - name: Bump version
@@ -63,7 +63,7 @@ jobs:
           printf "| %s | %s | %s | %s | %s |\n" \
             "$V" "$SCHEMA" "$DESC" "$DATE" "$SHA" \
             >> db/version_table.md
-            
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
