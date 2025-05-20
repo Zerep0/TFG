@@ -6,86 +6,98 @@ on:
 
 jobs:
   version:
-    name: Version Schema
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           persist-credentials: true
 
-      - name: Check commit message for accept
-        id: check_msg
+      - name: Detect changed .orion
+        id: detect_orion
+        run: |
+          # Ruta relativa al .orion modificado
+          SCRIPT=$(git show --name-only --pretty="" $GITHUB_SHA | grep '\.orion$' || true)
+          echo "script=$SCRIPT" >> $GITHUB_OUTPUT
+
+      - name: Parse commit message
+        id: parse_msg
         run: |
           MSG="${{ github.event.head_commit.message }}"
-          echo "Commit message: $MSG"
-          if ! echo "$MSG" | grep -qE '^orion\(accept\): [^,]+,[^ ]+'; then
-            echo "Not an accept commit – skipping."
+          if ! echo "$MSG" | grep -qE '^orion\((accept|cancel)\): [^,]+'; then
+            echo "Not an orion action commit – skipping."
             exit 78
           fi
-          SCHEMA=$(echo "$MSG" | sed -E 's/^orion\(accept\): ([^,]+),.*$/\1/')
-          DESC=$(echo "$MSG" | sed -E 's/^orion\(accept\): [^,]+,(.*)$/\1/')
-          echo "schema=$SCHEMA" >> $GITHUB_OUTPUT
-          echo "description=$DESC" >> $GITHUB_OUTPUT
+          ACTION=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\):.*$/\1/')
+          SCHEMA_PATH="${{ steps.detect_orion.outputs.script }}"
+          SCHEMA_NAME=$(basename "$SCHEMA_PATH")
+          DESC=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\): [^,]+,?(.*)$/\1/')
+          echo "action=$ACTION"        >> $GITHUB_OUTPUT
+          echo "schema_path=$SCHEMA_PATH" >> $GITHUB_OUTPUT
+          echo "schema_name=$SCHEMA_NAME" >> $GITHUB_OUTPUT
+          echo "description=$DESC"     >> $GITHUB_OUTPUT
 
-      - name: Ensure db and version files
+      - name: Ensure db structure
         run: |
-          mkdir -p db/migrations
-          if [ ! -f db/orion_schema_version.txt ]; then
-            echo "-1" > db/orion_schema_version.txt
-          fi
-
+          mkdir -p db/migrations db/orion_scripts
+          [ -f db/orion_schema_version.txt ] || echo "-1" > db/orion_schema_version.txt
           if [ ! -f db/version_table.md ]; then
-            echo "# Orion Schema Version History"                       > db/version_table.md
-            echo ""                                                    >> db/version_table.md
-            echo "| Version | Fichero \`.orion\` | Descripción | Fecha | Commit SHA |" \
-                                                                     >> db/version_table.md
-            echo "|:-------:|:-----------------|:-----------:|:-----:|:----------:|" \
-                                                                     >> db/version_table.md
+            cat > db/version_table.md <<EOF
+          # Orion Schema Version History
+
+          | Version | Fichero \`.orion\` | Acción | Descripción | Fecha | Commit SHA |
+          |:-------:|:-----------------|:------:|:-----------:|:-----:|:----------:|
+          EOF
           fi
 
-      - name: Bump version
-        id: bump
+      - name: Handle accept
+        if: steps.parse_msg.outputs.action == 'accept'
         run: |
+          # 1) bump version
           CUR=$(cat db/orion_schema_version.txt)
           NEXT=$((CUR + 1))
           echo "$NEXT" > db/orion_schema_version.txt
-          echo "next=$NEXT" >> $GITHUB_OUTPUT
 
-      - name: Extract previous `.orion` into db/orion_scripts
-        if: steps.check_msg.outputs.schema
-        run: |
-          SCRIPT="${{ steps.detect_orion.outputs.script }}"     # ruta completa del .orion
-          BASENAME=$(basename "$SCRIPT")                        # sólo el nombre de fichero
-          V="${{ steps.bump.outputs.next }}"
-          PREV=$((V - 1))
+          # 2) archive previous .orion
+          PREV=$CUR
           mkdir -p db/orion_scripts
+          git show HEAD^:"${{ steps.parse_msg.outputs.schema_path }}" \
+            > db/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}
 
-          if [ "$PREV" -ge -1 ]; then
-            DEST="db/orion_scripts/V${PREV}_${BASENAME}"
-            git show HEAD^:"$SCRIPT" > "$DEST"
-            echo "Saved previous schema ($SCRIPT) to $DEST"
-          else
-            echo "No previous version to extract (PREV=$PREV), skipping."
-          fi
-
-      - name: Append new row to version_table.md
-        run: |
-          V="${{ steps.bump.outputs.next }}"
-          SCHEMA="${{ steps.check_msg.outputs.schema }}"
-          DESC="${{ steps.check_msg.outputs.description }}"
+          # 3) append row to table
           DATE="$(date '+%Y-%m-%d %H:%M %Z')"
           SHA="${GITHUB_SHA::7}"
-          printf "| %s | %s | %s | %s | %s |\n" \
-            "$V" "$SCHEMA" "$DESC" "$DATE" "$SHA" \
+          printf "| %s | %s | %s | %s | %s | %s |\n" \
+            "$NEXT" \
+            "${{ steps.parse_msg.outputs.schema_name }}" \
+            "accept" \
+            "${{ steps.parse_msg.outputs.description }}" \
+            "$DATE" \
+            "$SHA" \
             >> db/version_table.md
 
-      - name: Commit changes
-        if: steps.check_msg.outputs.schema
+      - name: Handle cancel
+        if: steps.parse_msg.outputs.action == 'cancel'
+        run: |
+          # Remove the .orion file from the repository
+          ORION_FILE="${{ steps.parse_msg.outputs.schema_path }}"
+          if [ -f "$ORION_FILE" ]; then
+            rm "$ORION_FILE"
+            echo "Removed .orion file: $ORION_FILE"
+          else
+            echo "Warning: .orion file not found at $ORION_FILE"
+          fi
+
+      - name: Stage & commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore: schema v${{ steps.bump.outputs.next }} accept ${{ steps.check_msg.outputs.schema }}"
-          file_pattern: "."            # ahora pilla todo lo que esté staged
-          push_options: "--force-with-lease"
+          commit_message: "chore: schema ${{ steps.parse_msg.outputs.action }} ${{ steps.parse_msg.outputs.schema_name }}"
+          file_pattern: |
+            db/orion_schema_version.txt
+            db/version_table.md
+            db/orion_scripts/**
+            ${{ steps.parse_msg.outputs.schema_path }}
+          push_options: --force-with-lease
