@@ -58,7 +58,7 @@ jobs:
       - name: Ensure db structure
         run: |
           mkdir -p db/migrations db/orion_scripts
-          [ -f db/orion_schema_version.txt ] || echo "-1" > db/orion_schema_version.txt
+          [ -f db/orion_schema_version.txt ] || echo "0" > db/orion_schema_version.txt
           if [ ! -f db/version_table.md ]; then
             echo "# Orion Schema Version History"                       > db/version_table.md
             echo ""                                                    >> db/version_table.md
