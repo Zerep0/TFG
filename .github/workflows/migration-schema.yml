@@ -78,13 +78,17 @@ jobs:
           NEXT=$((CUR + 1))
           echo "$NEXT" > db/orion_schema_version.txt
 
-          # 2) archive previous .orion
+          # 2) archive previous .orion and remove it from the root
           PREV=$CUR
           mkdir -p db/orion_scripts
           git show HEAD^:"${{ steps.parse_msg.outputs.schema_path }}" \
             > db/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}
 
-          # 3) append row to table
+          if [ -f "${{ steps.parse_msg.outputs.schema_name }}" ]; then
+            rm -f "${{ steps.parse_msg.outputs.schema_name }}"
+          fi
+
+          # 3) append row to table 
           DATE="$(date '+%Y-%m-%d %H:%M %Z')"
           SHA="${GITHUB_SHA::7}"
           printf "| %s | %s | %s | %s | %s |\n" \
@@ -95,6 +99,8 @@ jobs:
             "$SHA" \
             >> db/version_table.md
           
+          
+
           # 4) Preparar todos los cambios para el commit
           git add -A  # Staging explicitly all changes
           echo "Todos los cambios han sido preparados para el commit"
