@@ -10,8 +10,8 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
+      contents: write     # necesario para hacer push de los cambios
       actions: read
-      contents: read
       security-events: write
     strategy:
       matrix:
@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          persist-credentials: true  # para poder pushear
 
       - name: Detect added or modified .orion
         id: detect_orion
@@ -51,6 +53,13 @@ jobs:
                -jar .github/codeql/predictor.jar \
                -i "${{ steps.detect_orion.outputs.script }}" \
                -o .github/codeql/queries
+
+      - name: Commit generated queries
+        if: steps.detect_orion.outputs.run == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: update CodeQL queries from ${{ steps.detect_orion.outputs.script }}"
+          file_pattern: ".github/codeql/queries/**"
 
       - name: Initialize CodeQL
         if: steps.detect_orion.outputs.run == 'true'
