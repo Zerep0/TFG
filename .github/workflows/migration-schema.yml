@@ -88,7 +88,7 @@ jobs:
           DATE="$(date '+%Y-%m-%d %H:%M %Z')"
           SHA="${GITHUB_SHA::7}"
           printf "| %s | %s | %s | %s | %s |\n" \
-            "$NEXT" \
+            "$PREV" \
             "${{ steps.parse_msg.outputs.schema_name }}" \
             "${{ steps.parse_msg.outputs.description }}" \
             "$DATE" \

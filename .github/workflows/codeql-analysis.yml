@@ -1,0 +1,90 @@
+name: "CodeQL"
+
+on:
+  push:
+    paths:
+      - '**/*.orion'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # necesario para hacer push de los cambios
+      actions: read
+      security-events: write
+    strategy:
+      matrix:
+        language: [ 'java-kotlin' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true  # para poder pushear
+
+      - name: Detect added or modified .orion
+        id: detect_orion
+        run: |
+          CHANGED=$(git show --name-status --pretty="" $GITHUB_SHA \
+                    | grep -E '^[AM]\s+.*\.orion$' \
+                    | awk '{print $2}' || true)
+          echo "script=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "run=false" >> $GITHUB_OUTPUT
+          else
+            echo "run=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Skip if no new or modified .orion
+        if: steps.detect_orion.outputs.run == 'false'
+        run: |
+          echo "No .orion files added or modified — skipping."
+
+      - name: Clean old generated queries
+        if: steps.detect_orion.outputs.run == 'true'
+        run: rm -rf .github/codeql/queries/*
+
+      - name: Generate CodeQL queries
+        if: steps.detect_orion.outputs.run == 'true'
+        run: |
+          echo "Generating queries for ${{ steps.detect_orion.outputs.script }}"
+          java --add-opens java.base/java.lang=ALL-UNNAMED \
+               -jar .github/codeql/predictor.jar \
+               -i "${{ steps.detect_orion.outputs.script }}" \
+               -o .github/codeql/queries
+
+      - name: Commit generated queries
+        if: steps.detect_orion.outputs.run == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: update CodeQL queries from ${{ steps.detect_orion.outputs.script }}"
+          file_pattern: ".github/codeql/queries/**"
+
+      - name: Initialize CodeQL
+        if: steps.detect_orion.outputs.run == 'true'
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Build with Maven
+        if: steps.detect_orion.outputs.run == 'true'
+        run: mvn -B package --file UseCase/pom.xml
+
+      - name: List files after Maven build
+        if: steps.detect_orion.outputs.run == 'true'
+        run: ls -R UseCase/
+
+      - name: Perform CodeQL Analysis
+        if: steps.detect_orion.outputs.run == 'true'
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+          output: results.sarif
+
+      - name: Echo results
+        if: steps.detect_orion.outputs.run == 'true'
+        run: |
+          echo "Analysis complete; SARIF output:"
+          cat results.sarif/java.sarif
