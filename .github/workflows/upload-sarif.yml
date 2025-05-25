@@ -9,11 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    # This step checks out a copy of the repository.
+    # (1) This step checks out a copy of the repository.
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Upload SARIF file
+    - name: Upload SARIF file # (2) Send the SARIF report to GitHub Security
       uses: github/codeql-action/upload-sarif@v3
       with:
-        # Path to SARIF file relative to the root of the repository
+        # (3) Path to SARIF file relative to the root of the repository
         sarif_file: results.sarif
