@@ -64,18 +64,18 @@ jobs:
           echo "schema_name=$SCHEMA_NAME" >> $GITHUB_OUTPUT
           echo "description=$DESC"     >> $GITHUB_OUTPUT
 
-      # 4) Ensure the DB folder structure and version-tracking files exist
-      - name: Ensure db structure
+      # 4) Ensure the orion folder structure and version-tracking files exist
+      - name: Ensure orion structure
         run: |
-          mkdir -p db/migrations db/orion_scripts
-          [ -f db/orion_schema_version.txt ] || echo "0" > db/orion_schema_version.txt
-          if [ ! -f db/version_table.md ]; then
-            echo "# Orion Schema Version History"                       > db/version_table.md
-            echo ""                                                    >> db/version_table.md
+          mkdir -p orion/migrations orion/orion_scripts
+          [ -f orion/orion_schema_version.txt ] || echo "0" > orion/orion_schema_version.txt
+          if [ ! -f orion/version_table.md ]; then
+            echo "# Orion Schema Version History"                       > orion/version_table.md
+            echo ""                                                    >> orion/version_table.md
             echo "| Version | Fichero \`.orion\` | Descripción | Fecha | Commit SHA |" \
-                                                                     >> db/version_table.md
+                                                                     >> orion/version_table.md
             echo "|:-------:|:-----------------|:-----------:|:-----:|:----------:|" \
-                                                                     >> db/version_table.md
+                                                                     >> orion/version_table.md
           fi
 
       # 5) If action=accept, bump version and archive previous schema
@@ -83,15 +83,15 @@ jobs:
         if: steps.parse_msg.outputs.action == 'accept'
         run: |
           # Bump version number
-          CUR=$(cat db/orion_schema_version.txt)
+          CUR=$(cat orion/orion_schema_version.txt)
           NEXT=$((CUR + 1))
-          echo "$NEXT" > db/orion_schema_version.txt
+          echo "$NEXT" > orion/orion_schema_version.txt
 
           # Archive the old .orion file from the previous commit
           PREV=$CUR
-          mkdir -p db/orion_scripts
+          mkdir -p orion/orion_scripts
           git show HEAD^:"${{ steps.parse_msg.outputs.schema_path }}" \
-            > db/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}
+            > orion/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}
 
           # Remove the root .orion script if it still exists
           if [ -f "${{ steps.parse_msg.outputs.schema_name }}" ]; then
@@ -107,7 +107,7 @@ jobs:
             "${{ steps.parse_msg.outputs.description }}" \
             "$DATE" \
             "$SHA" \
-            >> db/version_table.md
+            >> orion/version_table.md
           
           # Stage all changes
           git add -A
@@ -133,8 +133,8 @@ jobs:
         with:
           commit_message: "chore: schema ${{ steps.parse_msg.outputs.action }} ${{ steps.parse_msg.outputs.schema_name }}"
           file_pattern: |
-            db/orion_schema_version.txt
-            db/version_table.md
-            db/orion_scripts/**
+            orion/orion_schema_version.txt
+            orion/version_table.md
+            orion/orion_scripts/**
             ${{ steps.parse_msg.outputs.schema_path }}
           push_options: --force-with-lease
