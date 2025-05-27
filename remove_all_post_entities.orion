@@ -1,0 +1,8 @@
+Umugram_ops operations
+
+SCRIPT MODE
+
+DELETE ENTITY Post
+DELETE ENTITY VideoPost
+DELETE ENTITY PhotoPost
+DELETE ENTITY LivePost

@@ -1,6 +1,7 @@
 package com.umugram.Tfg.repositories;
 
 import com.umugram.Tfg.domain.Post;
+import com.umugram.Tfg.domain.LivePost;
 import com.umugram.Tfg.domain.User;
 import com.umugram.Tfg.repositories.custom.CustomPostRepository;
 
@@ -21,6 +22,9 @@ public interface PostRepository extends JpaRepository<Post, Long>, CustomPostRep
 
     @Query("SELECT Post FROM Post Post WHERE Post.id < :id")
     HashSet<Post> findAllLessUsers2(@Param("id") Long id);
+
+    @Query(name = "LivePost.findAllActiveStreams")
+    List<LivePost> findAllActiveStreams(@Param("user") User user);
 
     @Transactional
     @Modifying
