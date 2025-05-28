@@ -4,7 +4,6 @@ Este repositorio contiene la implementación completa del proyecto Umugram, que 
 
 # Mi proyecto
 
-```markdown
 - 📁 **.github**
   - 📁 codeql
   - 📄 codeql-config.yml
@@ -20,5 +19,5 @@ Este repositorio contiene la implementación completa del proyecto Umugram, que 
   - 📁 es.um.uschema.xtext.orion.parent
   - 📁 spring.data.jpa.codeq.generator
   - 📁 uschema
-```
+
 
