@@ -7,55 +7,34 @@ Este repositorio contiene la implementación completa del proyecto Umugram, que 
 ```mermaid
 flowchart TD
   subgraph UMUGRAM
-    subgraph .github
+    subgraph GITHUB[".github/"]
       codeql["codeql/"]
       cfg["codeql-config.yml"]
       jar["generator.jar"]
-      workflows["workflows/"]
+      subgraph WFS["workflows/"]
+        a["codeql-analysis.yml"]
+        b["migration-schema.yml"]
+        c["upload-sarif.yml"]
+      end
     end
-    subgraph workflows
-      a["codeql-analysis.yml"]
-      b["migration-schema.yml"]
-      c["upload-sarif.yml"]
-    end
-    subgraph orion
+    subgraph ORION["orion/"]
       scripts["orion_scripts/"]
       vtxt["orion_schema_version.txt"]
       vmd["version_table.md"]
     end
-    subgraph Tools
+    subgraph TOOLS["Tools/"]
       t1["es.um.uschema.xtext.athena.parent"]
       t2["es.um.uschema.xtext.orion.parent"]
       t3["spring.data.jpa.codeq.generator"]
       t4["uschema/"]
       t5["aa/"]
     end
-    subgraph UseCase
-      /* …vacío… */
-    end
-    
-    UMUGRAM --> .github
-    UMUGRAM --> orion
-    UMUGRAM --> Tools
-    UMUGRAM --> UseCase
-    
-    .github --> codeql
-    .github --> cfg
-    .github --> jar
-    .github --> workflows
-    
-    workflows --> a
-    workflows --> b
-    workflows --> c
-    
-    orion --> scripts
-    orion --> vtxt
-    orion --> vmd
-    
-    Tools --> t1
-    Tools --> t2
-    Tools --> t3
-    Tools --> t4
-    Tools --> t5
+    UseCase["UseCase/"]
+  end
+
+  UMUGRAM --> GITHUB
+  UMUGRAM --> ORION
+  UMUGRAM --> TOOLS
+  UMUGRAM --> UseCase
 ```
 
