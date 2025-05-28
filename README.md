@@ -6,35 +6,29 @@ Este repositorio contiene la implementación completa del proyecto Umugram, que 
 
 ```mermaid
 flowchart TD
-  subgraph UMUGRAM
-    subgraph GITHUB[".github/"]
-      codeql["codeql/"]
-      cfg["codeql-config.yml"]
-      jar["generator.jar"]
-      subgraph WFS["workflows/"]
-        a["codeql-analysis.yml"]
-        b["migration-schema.yml"]
-        c["upload-sarif.yml"]
-      end
-    end
-    subgraph ORION["orion/"]
-      scripts["orion_scripts/"]
-      vtxt["orion_schema_version.txt"]
-      vmd["version_table.md"]
-    end
-    subgraph TOOLS["Tools/"]
-      t1["es.um.uschema.xtext.athena.parent"]
-      t2["es.um.uschema.xtext.orion.parent"]
-      t3["spring.data.jpa.codeq.generator"]
-      t4["uschema/"]
-      t5["aa/"]
-    end
-    UseCase["UseCase/"]
-  end
+  ROOT["./"]:::root
+  ROOT --- GITHUB[".github/"]:::folder
+  ROOT --- ORION["orion/"]:::folder
+  ROOT --- TOOLS["Tools/"]:::folder
 
-  UMUGRAM --> GITHUB
-  UMUGRAM --> ORION
-  UMUGRAM --> TOOLS
-  UMUGRAM --> UseCase
+  GITHUB --- codeql["codeql/"]:::folder
+  GITHUB --- cfg["codeql-config.yml"]:::file
+  GITHUB --- wfs["workflows/"]:::folder
+  wfs   --- a["codeql-analysis.yml"]:::file
+  wfs   --- b["migration-schema.yml"]:::file
+  wfs   --- c["upload-sarif.yml"]:::file
+
+  ORION --- scripts["orion_scripts/"]:::folder
+  ORION --- vmd["version_table.md"]:::file
+
+  TOOLS --- t1["es.um.uschema.xtext.athena.parent"]:::folder
+  TOOLS --- t2["es.um.uschema.xtext.orion.parent"]:::folder
+  TOOLS --- t3["spring.data.jpa.codeq.generator"]:::folder
+  TOOLS --- t4["uschema/"]:::folder
+  TOOLS --- t5["aa/"]:::folder
+
+  classDef root   fill:#fff,stroke:#000,stroke-width:2px;
+  classDef folder fill:#eef,stroke:#66f;
+  classDef file   fill:#ffe,stroke:#e62;
 ```
 
