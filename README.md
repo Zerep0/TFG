@@ -1,4 +1,4 @@
-# Umugram
+# TFG
 
 Este repositorio contiene la implementación completa del proyecto Umugram, que demuestra cómo realizar una integración continua con una herramienta predictora mediante el lenguaje Orion. También se proporciona un genererador de Orion a MySQL encargado de las migraciones de esquema.
 
@@ -14,6 +14,7 @@ Este repositorio contiene la implementación completa del proyecto Umugram, que 
 - 📁 **orion**
   - 📁 orion_scripts
   - 📄 version_table.md
+  - 📄 orion_schema_version.txt
 - 📁 **Tools**
   - 📁 es.um.uschema.xtext.athena.parent
   - 📁 es.um.uschema.xtext.orion.parent
@@ -42,6 +43,8 @@ Este repositorio contiene la implementación completa del proyecto Umugram, que 
    - Aplicación de ejemplo en Java/Spring Boot con Spring Data JPA
 
 # Como ejecutar herramienta M2T a MySQL
+
+1. Se debe instalar desde la página oficial de eclipse el paquete modeling tools: 
 
 # Como ejecutar workflows junto con Orion
   
