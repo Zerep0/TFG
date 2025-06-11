@@ -16,26 +16,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
           persist-credentials: true
 
-      # 2) Detect which .orion file the commit refers to
-      - name: Detect changed .orion
+      # 2) Extract schema name from the commit message (no commit history check)
+      - name: Extract schema information
         id: detect_orion
         run: |
           # Extract the schema name from the commit message
           MSG="${{ github.event.head_commit.message }}"
           SCHEMA_NAME=$(echo "$MSG" | sed -E 's/^orion\((accept|cancel)\): ([^,]+).*$/\2/')
-
-          # Always look for the .orion file in the previous commit
-          SCRIPT=$(git ls-files --with-tree=HEAD^ | grep -F "$SCHEMA_NAME" || true)
           
-          if [ -z "$SCRIPT" ]; then
-            echo "Warning: File $SCHEMA_NAME not found in previous commit"
-          else
-            echo "Found in previous commit: $SCRIPT"
-          fi
+          # Set the schema path directly without checking previous commits
+          SCRIPT="$SCHEMA_NAME"
           
+          echo "Using schema: $SCHEMA_NAME"
           echo "script=$SCRIPT" >> $GITHUB_OUTPUT
 
       # 3) Parse action (accept vs cancel) and description from the commit message
@@ -78,7 +72,7 @@ jobs:
                                                                      >> orion/version_table.md
           fi
 
-      # 5) If action=accept, bump version and archive previous schema
+      # 5) If action=accept, bump version and archive schema
       - name: Handle accept
         if: steps.parse_msg.outputs.action == 'accept'
         run: |
@@ -87,15 +81,19 @@ jobs:
           NEXT=$((CUR + 1))
           echo "$NEXT" > orion/orion_schema_version.txt
 
-          # Archive the old .orion file from the previous commit
+          # Archive the current .orion file from the repository
           PREV=$CUR
           mkdir -p orion/orion_scripts
-          git show HEAD^:"${{ steps.parse_msg.outputs.schema_path }}" \
-            > orion/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}
-
-          # Remove the root .orion script if it still exists
-          if [ -f "${{ steps.parse_msg.outputs.schema_name }}" ]; then
-            rm -f "${{ steps.parse_msg.outputs.schema_name }}"
+          
+          # Search for the file in the current repository and copy it
+          SCHEMA_FILE="${{ steps.parse_msg.outputs.schema_name }}"
+          if [ -f "$SCHEMA_FILE" ]; then
+            cp "$SCHEMA_FILE" "orion/orion_scripts/V${PREV}_${{ steps.parse_msg.outputs.schema_name }}"
+            # Remove the original file after archiving
+            rm -f "$SCHEMA_FILE"
+          else
+            echo "ERROR: Schema file not found: $SCHEMA_FILE"
+            exit 1
           fi
 
           # Append a new row to the version table
