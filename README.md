@@ -1,6 +1,23 @@
-# TFG
+# Proyecto 
 
-Este repositorio contiene la implementación completa del proyecto Umugram, que demuestra cómo realizar una integración continua con una herramienta predictora mediante el lenguaje Orion. También se proporciona un genererador de Orion a MySQL encargado de las migraciones de esquema.
+This repository includes the main results achieved in the project proyecto **"An agile approach to evolve NoSQL and Relational schemas: data and code migration"**, project PID2020-117391GB-I00, (september, 2021 to february,2025) found by the Spanish Ministry of Science and Universities, que llevó a cabo el grupo Modelum de la Universidad de Murcia, cuyo IP es Jesús J. García Molina.
+
+This project has developed an innovative toolset to support agile and safe database evolution, addressing current needs in continuous software delivery and adaptive systems. Traditional database systems often lack flexibility when adapting to evolving application requirements. Our approach enables systematic and controlled schema changes across a range of database technologies, both relational and NoSQL.
+     At the core of the solution is U-Schema, a unified metamodel that abstracts and represents database schemas independently of the underlying technology. Based on this model, we have designed two domain-specific languages: Athena for schema definition, and Orion for expressing evolution scripts through a formal taxonomy of schema changes. This taxonomy is one of the project’s main theoretical contributions and has been designed to be independent of any specific data model, making it applicable across diverse database paradigms.
+     The tools support schema versioning and automated migration, generating native scripts for widely used database systems such as MongoDB, Cassandra, Neo4j, and MySQL. While automatic rollback is not implemented, the system maintains a complete history of evolution scripts, enabling the recreation of any past schema version when needed.
+     Additionally, we have developed mechanisms for static code analysis (based on CodeQL) that detect application code fragments potentially affected by schema changes—such as JPQL queries or JPA annotations—and report issues using standard formats. These analyses are integrated in CI/CD pipelines through GitHub Actions, helping teams detect and address potential failures early in the development process.
+     The approach has been validated through real-world datasets and case studies, resulting in international publications, open-source prototypes, and academic contributions. Overall, the project advances the capabilities available for database evolution in modern application development environments.
+     Recently, we have also started to explore the use of Large Language Models (LLMs) to assist in the generation of Athena schemas and Orion evolution scripts from natural language descriptions, opening new opportunities for future research and tooling.
+
+
+
+
+que demuestra cómo realizar una integración continua con una herramienta predictora mediante el lenguaje Orion. También se proporciona 
+un genererador de Orion a MySQL encargado de las migraciones de esquema.
+
+
+
+
 
 # Mi proyecto
 
@@ -20,7 +37,12 @@ Este repositorio contiene la implementación completa del proyecto Umugram, que 
   - 📁 es.um.uschema.xtext.orion.parent
   - 📁 spring.data.jpa.codeq.generator
   - 📁 uschema
-
+- 📁 **Publications**
+  - 📄 Comonos-2023.pdf
+  - 📄 IEEE-TDKE-2024.pdf
+  - 📄 Thesis-Orion-2023-AlbertoHC.pdf
+  - 📄 Thesis-Uschema-2023-CarlosFC.pdf
+  - 📄 TFG-OrionFlow-2025-AntonioPS.pdf
 
 # Componentes principales
 
