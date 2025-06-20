@@ -1,4 +1,4 @@
-# Proyect
+# Project
 
 This TFG has developed an innovative toolset to support agile and safe database evolution, addressing current needs in continuous software delivery and adaptive systems. Traditional database systems often lack flexibility when adapting to evolving application requirements. Our approach enables systematic and controlled schema changes across a range of database technologies, both relational and NoSQL.
      At the core of the solution is U-Schema, a unified metamodel that abstracts and represents database schemas independently of the underlying technology. Based on this model, we have designed two domain-specific languages: Athena for schema definition, and Orion for expressing evolution scripts through a formal taxonomy of schema changes. This taxonomy is one of the project’s main theoretical contributions and has been designed to be independent of any specific data model, making it applicable across diverse database paradigms.
